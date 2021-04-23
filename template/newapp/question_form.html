@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+{% extends 'base.html' %}
+{% block content %}
+
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <title>질문 양식</title>
+</head>
+<body>
+
+<link rel="stylesheet" type="text/css" href="{% static 'bootstrap.min.css' %}">
+
+<div class="container my-3">
+    <h4 class="my-3 border-bottom">질문 등록</h4>
+    <form method="post" class="post-form">
+        {% csrf_token %}
+        {% if form.errors %}
+        <div>
+        {% for col in form %}
+            {% if col.errors %}
+            <h3>{{col.label}}</h3>
+            {{col.errors}}
+            {% endif %}
+        {% endfor %}
+        </div>
+        {% endif %}
+    <div class="form-group">
+        <label for="q_subject">제목</label>
+        <input type="text" class="form-control" name="q_subject" id="q_subject" value="">
+    </div>
+    <div class="form-group">
+        <label for="q_content">내용</label>
+        <textarea class="form-control" name="q_content" id="q_content" rows="10"></textarea>
+    </div>
+        <button type="submit" class="btn btn-primary">저장하기</button>
+    </form>
+</div>
+
+{% endblock %}
+
+</body>
+</html>

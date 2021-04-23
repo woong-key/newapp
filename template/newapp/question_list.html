@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+{% extends 'base.html' %}
+{% load newapp_filter %}
+{% block content %}
+
+<head>
+    <meta charset="UTF-8">
+    <title>목록</title>
+</head>
+
+<body>
+
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'bootstrap.min.css' %}">
+
+<div class="container my-3">
+    <table class="table table-active">
+
+        <thead>
+        <tr class="thead-dark">
+            <th>글 번호</th>
+            <th>제목</th>
+            <th>글쓴이</th>
+            <th>작성 일자</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        {% if question_list1 %}
+        {% for question in question_list1 %}
+        <!-- 게시글 번호 = 전체 게시물 개수 - 시작 인덱스 - 현재 인덱스 + 1 -->
+        <tr class="table-success">
+<!--            <td>{{ forloop.counter }}</td>-->
+            <td>{{ question_list1.paginator.count|sub:question_list1.start_index|sub:forloop.counter0|add:1 }}</td>
+            <td><a href="{% url 'newapp:detail' question.id %}">{{question.q_subject}}</a>
+            {% if question.answer_set.count > 0 %}
+            <span class="text-danger">{{ question.answer_set.count }}</span>
+            {% endif %}</td>
+            <td>{{ question.author.username }}</td>
+            <td>{{ question.q_date }}</td>
+        </tr>
+            {% endfor %}
+        {% else %}
+        <tr>
+            <td colspan="3">질문이 없어요.</td>
+        </tr>
+        {% endif %}
+        </tbody>
+
+    </table>
+    <ul class="pagination justify-content-center">
+        {% if question_list1.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ question_list1.previous_page_number }}">이전</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <a class="page-link" href="#" tabindex="-1" aria-disabled="true"></a>
+        </li>
+        {% endif %}
+
+        {% for page_number in question_list1.paginator.page_range %}
+
+            {% if page_number >= question_list1.number|add:-2 and page_number <= question_list1.number|add:2 %}
+            <!-- 현재 페이지를 기준으로 좌우 add: 숫자만큼 보이게 함 -->
+            {% if page_number == question_list1.number %}
+            <li class="page-item active" aria-current="page">
+                <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+            </li>
+            {% else %}
+            <li  class="page-item">
+                <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+            </li>
+            {% endif %}
+
+            {% endif %}
+
+        {% endfor %}
+
+
+        {% if question_list1.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ question_list1.next_page_number }}">다음</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <a class="page-link" href="#" tabindex="-1" aria-disabled="true"></a>
+        </li>
+        {% endif %}
+    </ul>
+
+
+    <a href="{% url 'newapp:question_create' %}">질문 등록</a>
+    <br>
+
+</div>
+{% endblock %}
+</body>
+</html>
