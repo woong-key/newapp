@@ -9,22 +9,7 @@
     <meta charset="UTF-8">
     <title>목록</title>
 </head>
-{% block script %}
-<script>
-$(document).ready(function() {
-    $('.page-link').on('click', function() {
-        $('#page').val($(this).data('page'))
-        $('#searchForm').submit()
-    })
 
-    $('#btn_search').on('click', function() {
-        $('#kw').val($('.kw').val())
-        $('#page').val(1) // 1페이지부터 조회
-        $('#searchForm').submit()
-    })
-})
-</script>
-{% endblock %}
 <body>
 
 {% load static %}
@@ -35,7 +20,7 @@ $(document).ready(function() {
 
     <div class="row justify-content-end my-3">
         <div class="col-4 input-group">
-            <input type="text" class="form-control kw" value="">
+            <input type="text" class="form-control" value="">
             <div class="input-group">
                 <button class="btn btn-outline" type="button" id="btn_search">검색</button>
             </div>
@@ -83,7 +68,7 @@ $(document).ready(function() {
     <ul class="pagination justify-content-center">
         {% if question_list1.has_previous %}
         <li class="page-item">
-            <a class="page-link" href="#" data-page="{{ question_list1.previous_page_number }}">이전</a>
+            <a class="page-link" href="?page={{ question_list1.previous_page_number }}">이전</a>
         </li>
         {% else %}
         <li class="page-item disabled">
@@ -97,11 +82,11 @@ $(document).ready(function() {
             <!-- 현재 페이지를 기준으로 좌우 add: 숫자만큼 보이게 함 -->
             {% if page_number == question_list1.number %}
             <li class="page-item active" aria-current="page">
-                <a class="page-link" href="#" data-page="{{ page_number }}">{{ page_number }}</a>
+                <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
             </li>
             {% else %}
             <li  class="page-item">
-                <a class="page-link" href="#" data-page="{{ page_number }}">{{ page_number }}</a>
+                <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
             </li>
             {% endif %}
 
@@ -112,7 +97,7 @@ $(document).ready(function() {
 
         {% if question_list1.has_next %}
         <li class="page-item">
-            <a class="page-link" href="#" data-page="{{ question_list1.next_page_number }}">다음</a>
+            <a class="page-link" href="?page={{ question_list1.next_page_number }}">다음</a>
         </li>
         {% else %}
         <li class="page-item disabled">

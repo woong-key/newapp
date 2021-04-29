@@ -9,13 +9,21 @@
 
 {% block script %}
 <script>
+
 $(document).ready(function() {
     $('.delete').on('click', function() {
         if(confirm('정말 삭제할 거임?')) {
             location.href = $(this).data('uri');
         }
     });
+    $('.recommend').on('click', function() {
+    if(confirm('진짜 추천하시나요?')) {
+        location.href = $(this).data('uri');
+        }
+    });
+
 });
+
 
 </script>
 {% endblock %}
@@ -37,7 +45,15 @@ $(document).ready(function() {
     </div>
     {% endif %}
     <h2 class="border-bottom py-2">{{ question1.q_subject }}</h2>
-    <div class="card my-3">
+
+    <div class="row my-3">
+        <div class="col-1">
+            <div class="bg-light text-center p-3 m-1">{{ question1.voter.count }}</div>
+            <a href="#" class="recommend btn btn-sm btn-block my-1" data-uri="{% url 'newapp:vote_question' question1.id %}">추천</a>
+        </div>
+
+    <div class="col-11">
+    <div class="card">
         <div class="card-body">
             <div class="card-text" style="white-space: pre-line;">{{ question1.q_content }}</div>
             <div class="d-flex justify-content-end">
@@ -80,11 +96,18 @@ $(document).ready(function() {
                 <a href="{% url 'newapp:comment_create_question' question1.id %}">댓글 추가</a>
             </div>
     </div>
-
+    </div>
+    </div>
     <h5 class="border-bottom my-3 py-2">{{question1.answer_set.count}}개의 답변이 있습니다.</h5>
     {% for answer in question1.answer_set.all %}
 
-    <div class="card my-3">
+    <div class="row my-3">
+        <div class="col-1">
+            <div class="bg-light text-center p-3 m-1">{{ answer.voter.count }}</div>
+            <a href="#" class="recommend btn btn-sm btn-block my-1" data-uri="{% url 'newapp:vote_answer' answer.id %}">추천</a>
+        </div>
+    <div class="col-11">
+    <div class="card">
         <div class="card-body">
             <div class="card-text" style="white-space: pre-line;">{{ answer.a_content }}</div>
             <div class="d-flex justify-content-end">
@@ -123,6 +146,8 @@ $(document).ready(function() {
             <div>
                 <a href="{% url 'newapp:comment_create_answer' answer.id %}">댓글 추가</a>
             </div>
+    </div>
+    </div>
     </div>
     {% endfor %}
     <form action="{% url 'newapp:answer_create' question1.id %}" method="post" class="my-3">
